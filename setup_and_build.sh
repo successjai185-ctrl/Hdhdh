@@ -38,12 +38,12 @@ echo "Configuring build with ASan and UBSan..."
 gn gen out/Sanitizers --args='is_asan=true is_ubsan=true is_debug=false'
 
 # Build
-echo "Building angle_shader_translator..."
-autoninja -C out/Sanitizers angle_shader_translator
+echo "Building full ANGLE library (libEGL, libGLESv2) and shader translator..."
+autoninja -C out/Sanitizers angle_shader_translator libEGL libGLESv2
 
 echo "Build complete. Output in angle_src/out/Sanitizers/"
 echo "Verifying sanitizers..."
-if readelf -s out/Sanitizers/angle_shader_translator | grep -q "__asan_init"; then
+if readelf -s out/Sanitizers/libGLESv2.so | grep -q "__asan_init"; then
     echo "ASan detected."
 else
     echo "ASan NOT detected."
